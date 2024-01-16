@@ -45,9 +45,31 @@ const ChipInput: React.FC = () => {
   };
 
   const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Backspace' && inputValue === '') {
+    if (event.key === 'Enter') {
+      if (filteredItems.length > 0 && highlightedChip !== null) {
+        handleItemClick(filteredItems[0]); // Add the first suggestion on Enter
+      } else if (inputValue.trim() !== '') {
+        setChips(prevChips => [...prevChips, { id: inputValue, label: inputValue }]);
+        setInputValue('');
+      }
+    } else if (event.key === 'Backspace' && inputValue === '') {
       handleChipRemove();
+    } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      handleArrowKeyPress(event.key);
     }
+  };
+
+  const handleArrowKeyPress = (key: string) => {
+    const currentHighlightedIndex = filteredItems.indexOf(highlightedChip || '');
+    let newIndex;
+
+    if (key === 'ArrowUp') {
+      newIndex = currentHighlightedIndex > 0 ? currentHighlightedIndex - 1 : filteredItems.length - 1;
+    } else {
+      newIndex = currentHighlightedIndex < filteredItems.length - 1 ? currentHighlightedIndex + 1 : 0;
+    }
+
+    setHighlightedChip(filteredItems[newIndex]);
   };
 
   const handleChipClick = (chipId: string) => {
@@ -84,13 +106,15 @@ const ChipInput: React.FC = () => {
           placeholder="Type to search..."
         />
       </div>
-      <ul className="item-list">
-        {filteredItems.map(item => (
-          <li key={item} onClick={() => handleItemClick(item)}>
-            {item}
-          </li>
-        ))}
-      </ul>
+      <div className="suggestion-list">
+        <ul className="item-list">
+          {filteredItems.map(item => (
+            <li key={item} className={highlightedChip === item ? 'highlighted' : ''} onClick={() => handleItemClick(item)}>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

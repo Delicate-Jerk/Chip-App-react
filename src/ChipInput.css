@@ -23,7 +23,7 @@
 }
 
 .chip.highlighted {
-  background-color: #ffcc00; /* You can customize the highlight color */
+  background-color: #ffcc00;
 }
 
 input {
@@ -34,11 +34,21 @@ input {
   outline: none;
 }
 
+.chip-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align suggestions to the left */
+}
+
+.suggestion-list {
+  width: 100%; /* Take full width of the container */
+}
+
 .item-list {
   list-style-type: none;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Display items vertically */
 }
 
 .item {
