@@ -46,11 +46,13 @@ const ChipInput: React.FC = () => {
 
   const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      if (filteredItems.length > 0 && highlightedChip !== null) {
-        handleItemClick(filteredItems[0]); // Add the first suggestion on Enter
-      } else if (inputValue.trim() !== '') {
-        setChips(prevChips => [...prevChips, { id: inputValue, label: inputValue }]);
-        setInputValue('');
+      const trimmedValue = inputValue.trim();
+      if (trimmedValue !== '') {
+        if (items.includes(trimmedValue)) {
+          handleItemClick(trimmedValue);
+        } else if (filteredItems.length > 0 && highlightedChip !== null) {
+          handleItemClick(filteredItems[0]); // Add the first suggestion on Enter
+        }
       }
     } else if (event.key === 'Backspace' && inputValue === '') {
       handleChipRemove();
